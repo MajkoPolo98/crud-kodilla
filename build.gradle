@@ -3,7 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 	//id 'war'
-}
+}git
 
 group = 'com.crud'
 version = '0.0.1-SNAPSHOT'
