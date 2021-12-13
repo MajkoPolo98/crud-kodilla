@@ -8,6 +8,7 @@ import java.util.Optional;
 
 @Getter
 @AllArgsConstructor       //Zadanie podstawowe
+@RequiredArgsConstructor
 
 @Builder
 public class Mail {
