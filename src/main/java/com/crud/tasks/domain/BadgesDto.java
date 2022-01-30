@@ -1,3 +1,4 @@
+/*
 package com.crud.tasks.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -15,3 +16,4 @@ public class BadgesDto {
     private AttachmentByType attachments;
 
 }
+*/
