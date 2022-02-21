@@ -9,6 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,12 +24,12 @@ public class SimpleEmailService {
 
     private final JavaMailSender javaMailSender;
 
-    private MimeMessagePreparator createMimeMessage(final Mail mail) {
+    private MimeMessagePreparator createMimeMessage(final Mail mail, String template) {
         return mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setTo(mail.getMailTo());
             messageHelper.setSubject(mail.getSubject());
-            messageHelper.setText(mailCreatorService.buildTrelloCardEmail(mail.getMessage()), true);
+            messageHelper.setText(template, true);
         };
     }
 
@@ -44,7 +45,18 @@ public class SimpleEmailService {
     public void send(final Mail mail) {
         log.info("Starting email preparation...");
         try {
-            javaMailSender.send(createMimeMessage(mail));
+            javaMailSender.send(createMimeMessage(mail, mailCreatorService.buildTrelloCardEmail(mail.getMessage())));
+            log.info("Email has been sent.");
+        } catch (MailException e) {
+            log.error("Failed to process email sending: " + e.getMessage(), e);
+        }
+    }
+
+
+    public void sendDaily(final Mail mail) {
+        log.info("Starting email preparation...");
+        try {
+            javaMailSender.send(createMimeMessage(mail, mailCreatorService.buildDailyEmail(mail.getMessage())));
             log.info("Email has been sent.");
         } catch (MailException e) {
             log.error("Failed to process email sending: " + e.getMessage(), e);
